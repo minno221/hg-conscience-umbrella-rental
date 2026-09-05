@@ -18,6 +18,7 @@ export default function UmbrellaGrid({ umbrellas }: { umbrellas: Umbrella[] }) {
   const [studentId, setStudentId] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [pin, setPin] = useState(""); // 추가: 대여 시 입력하는 PIN
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -26,11 +27,12 @@ export default function UmbrellaGrid({ umbrellas }: { umbrellas: Umbrella[] }) {
     setStudentId("");
     setName("");
     setPhone("");
+    setPin(""); // 추가
   }
 
   async function handleRent(id: number) {
     setLoading(true);
-    const result = await rentUmbrella(id, studentId, name, phone);
+    const result = await rentUmbrella(id, studentId, name, phone, pin); // 추가: pin 전달
     setMessage(result.message);
     setLoading(false);
     if (result.success) {
@@ -39,8 +41,15 @@ export default function UmbrellaGrid({ umbrellas }: { umbrellas: Umbrella[] }) {
   }
 
   async function handleReturn(id: number) {
+    // 추가: 반납(취소) 전에 PIN을 팝업창으로 물어봄
+    const inputPin = window.prompt("대여할 때 설정한 4자리 비밀번호를 입력해주세요.");
+    if (inputPin === null) {
+      // 사용자가 취소 버튼을 누른 경우 아무 것도 하지 않음
+      return;
+    }
+
     setLoading(true);
-    const result = await returnUmbrella(id);
+    const result = await returnUmbrella(id, inputPin); // 추가: pin 전달
     setMessage(result.message);
     setLoading(false);
   }
@@ -130,6 +139,16 @@ export default function UmbrellaGrid({ umbrellas }: { umbrellas: Umbrella[] }) {
                     placeholder="전화번호 (010-1234-5678)"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
+                    style={inputStyle}
+                  />
+                  {/* 추가: 반납할 때 쓸 4자리 비밀번호 입력칸 */}
+                  <input
+                    type="password"
+                    inputMode="numeric"
+                    maxLength={4}
+                    placeholder="반납용 비밀번호 4자리"
+                    value={pin}
+                    onChange={(e) => setPin(e.target.value.replace(/[^0-9]/g, ""))}
                     style={inputStyle}
                   />
                   <button
