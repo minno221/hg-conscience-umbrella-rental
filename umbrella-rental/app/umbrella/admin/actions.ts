@@ -50,7 +50,9 @@ export async function forceUpdateStatus(umbrellaId: number, newStatus: "availabl
     where: { id: umbrellaId },
     data: {
       status: newStatus,
-      borrower: newStatus === "available" ? null : "관리자 지정",
+      studentId: newStatus === "available" ? null : null,
+      renterName: newStatus === "available" ? null : "관리자 지정",
+      phone: newStatus === "available" ? null : null,
       rentedAt: newStatus === "rented" ? new Date() : null,
       updatedBy: "admin",
     },
