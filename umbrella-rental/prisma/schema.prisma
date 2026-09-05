@@ -1,0 +1,21 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  // 처음 개발/테스트용으로 SQLite 사용 (파일 하나로 DB가 관리돼서 세팅이 제일 쉬움)
+  // 나중에 실제 배포할 때는 PostgreSQL(Vercel Postgres 등)로 바꾸면 됨
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Umbrella {
+  id         Int       @id @default(autoincrement())
+  number     Int       @unique // 1~100번 관리
+  status     String    @default("available") // "available" | "rented"
+  borrower   String?   // 대여자 이름 or 학번
+  rentedAt   DateTime?
+  updatedBy  String    @default("system") // "student" | "admin"
+}
