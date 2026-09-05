@@ -9,7 +9,9 @@ type Umbrella = {
   id: number;
   number: number;
   status: string;
-  borrower: string | null;
+  studentId: string | null;
+  renterName: string | null;
+  phone: string | null;
 };
 
 export default function AdminGrid({ umbrellas }: { umbrellas: Umbrella[] }) {
@@ -49,7 +51,7 @@ export default function AdminGrid({ umbrellas }: { umbrellas: Umbrella[] }) {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
           gap: "10px",
         }}
       >
@@ -73,9 +75,21 @@ export default function AdminGrid({ umbrellas }: { umbrellas: Umbrella[] }) {
             >
               {u.number}번
               <div style={{ fontSize: "11px", fontWeight: "normal" }}>
-                {isAvailable ? "대여가능" : `대여중 (${u.borrower ?? "-"})`}
+                {isAvailable ? (
+                  "대여가능"
+                ) : (
+                  <>
+                    대여중
+                    <br />
+                    학번: {u.studentId ?? "-"}
+                    <br />
+                    이름: {u.renterName ?? "-"}
+                    <br />
+                    전화: {u.phone ?? "-"}
+                  </>
+                )}
               </div>
-              <div style={{ fontSize: "10px", opacity: 0.7 }}>
+              <div style={{ fontSize: "10px", opacity: 0.7, marginTop: "4px" }}>
                 클릭 시 강제 전환
               </div>
             </button>
