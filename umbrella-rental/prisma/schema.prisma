@@ -20,3 +20,4 @@ model Umbrella {
   phone      String?   // 대여자 전화번호
   rentedAt   DateTime?
   updatedBy  String    @default("system") // "student" | "admin"
+}
