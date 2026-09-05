@@ -7,7 +7,7 @@ generator client {
 datasource db {
   // 처음 개발/테스트용으로 SQLite 사용 (파일 하나로 DB가 관리돼서 세팅이 제일 쉬움)
   // 나중에 실제 배포할 때는 PostgreSQL(Vercel Postgres 등)로 바꾸면 됨
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -15,7 +15,8 @@ model Umbrella {
   id         Int       @id @default(autoincrement())
   number     Int       @unique // 1~100번 관리
   status     String    @default("available") // "available" | "rented"
-  borrower   String?   // 대여자 이름 or 학번
+  studentId  String?   // 대여자 학번
+  renterName String?   // 대여자 이름
+  phone      String?   // 대여자 전화번호
   rentedAt   DateTime?
   updatedBy  String    @default("system") // "student" | "admin"
-}
