@@ -11,11 +11,11 @@ datasource db {
 
 model Umbrella {
   id         Int       @id @default(autoincrement())
-  number     Int       @unique // 1~100번 관리
-  status     String    @default("available") // "available" | "rented"
-  studentId  String?   // 대여자 학번
-  renterName String?   // 대여자 이름
-  phone      String?   // 대여자 전화번호
+  number     Int       @unique
+  status     String    @default("available")
+  studentId  String?
+  renterName String?
+  phone      String?
   rentedAt   DateTime?
-  updatedBy  String    @default("system") // "student" | "admin"
+  updatedBy  String    @default("system")
 }
