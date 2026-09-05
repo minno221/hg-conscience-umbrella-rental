@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "seed": "tsx prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts",
+     "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^5.20.0",
