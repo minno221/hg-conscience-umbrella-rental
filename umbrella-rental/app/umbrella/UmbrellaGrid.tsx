@@ -8,23 +8,33 @@ type Umbrella = {
   id: number;
   number: number;
   status: string;
-  borrower: string | null;
+  studentId: string | null;
+  renterName: string | null;
+  phone: string | null;
 };
 
 export default function UmbrellaGrid({ umbrellas }: { umbrellas: Umbrella[] }) {
   const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [studentId, setStudentId] = useState("");
   const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
+  function resetForm() {
+    setSelectedId(null);
+    setStudentId("");
+    setName("");
+    setPhone("");
+  }
+
   async function handleRent(id: number) {
     setLoading(true);
-    const result = await rentUmbrella(id, name);
+    const result = await rentUmbrella(id, studentId, name, phone);
     setMessage(result.message);
     setLoading(false);
     if (result.success) {
-      setSelectedId(null);
-      setName("");
+      resetForm();
     }
   }
 
@@ -34,6 +44,16 @@ export default function UmbrellaGrid({ umbrellas }: { umbrellas: Umbrella[] }) {
     setMessage(result.message);
     setLoading(false);
   }
+
+  const inputStyle = {
+    width: "100%",
+    padding: "6px",
+    fontSize: "12px",
+    borderRadius: "6px",
+    border: "1px solid #ccc",
+    marginBottom: "4px",
+    boxSizing: "border-box" as const,
+  };
 
   return (
     <div>
@@ -55,7 +75,7 @@ export default function UmbrellaGrid({ umbrellas }: { umbrellas: Umbrella[] }) {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(90px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(110px, 1fr))",
           gap: "10px",
         }}
       >
@@ -68,7 +88,7 @@ export default function UmbrellaGrid({ umbrellas }: { umbrellas: Umbrella[] }) {
               <button
                 onClick={() =>
                   isAvailable
-                    ? setSelectedId(isSelected ? null : u.id)
+                    ? (isSelected ? resetForm() : setSelectedId(u.id))
                     : handleReturn(u.id)
                 }
                 disabled={loading}
@@ -93,17 +113,24 @@ export default function UmbrellaGrid({ umbrellas }: { umbrellas: Umbrella[] }) {
                 <div style={{ marginTop: "6px" }}>
                   <input
                     type="text"
-                    placeholder="이름/학번"
+                    placeholder="학번"
+                    value={studentId}
+                    onChange={(e) => setStudentId(e.target.value)}
+                    style={inputStyle}
+                  />
+                  <input
+                    type="text"
+                    placeholder="이름"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    style={{
-                      width: "100%",
-                      padding: "6px",
-                      fontSize: "12px",
-                      borderRadius: "6px",
-                      border: "1px solid #ccc",
-                      marginBottom: "4px",
-                    }}
+                    style={inputStyle}
+                  />
+                  <input
+                    type="tel"
+                    placeholder="전화번호 (010-1234-5678)"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    style={inputStyle}
                   />
                   <button
                     onClick={() => handleRent(u.id)}
