@@ -1,4 +1,3 @@
-// prisma/schema.prisma
 generator client {
   provider = "prisma-client-js"
 }
@@ -15,7 +14,12 @@ model Umbrella {
   studentId  String?
   renterName String?
   phone      String?
-  pinHash    String?   // 추가: 반납(취소)용 비밀번호 해시
   rentedAt   DateTime?
   updatedBy  String    @default("system")
+}
+
+model Student {
+  id        Int    @id @default(autoincrement())
+  studentId String @unique
+  name      String
 }
